@@ -60,6 +60,19 @@ public class DiagnosticRedactorTest {
     }
 
     @Test
+    public void masks_storeFieldsInCommaListLines() {
+        // 2026-10-24 실기기 덤프: 금액이 있는 목록 줄의 맨 앞 가게 지점명이 그대로 남았다
+        assertEquals("[가림],[가림], [주문번호], 배달료 2,450원, 도착예상시간 01:30",
+                r("샘플치킨 가상점,가나다로 1, T0TEST0002, 배달료 2,450원, 도착예상시간 01:30"));
+        assertEquals("[가림],[가림], [주문번호], 배달료 1,880원",
+                r("예시숯불치킨, 샘플빌딩, T0TEST0001, 배달료 1,880원"));
+        // 금액 안의 쉼표는 칸 구분이 아니다
+        assertEquals("배달료 12,450원, 도착예상시간 01:30", r("배달료 12,450원, 도착예상시간 01:30"));
+        // 금액 칸에 지점명이 붙어 있으면 그 칸도 가린다
+        assertEquals("[가림], 13건", r("샘플커피 가상점 3,000원, 13건"));
+    }
+
+    @Test
     public void keeps_missionLinesVerbatim() {
         assertEquals(MISSION_V1_18_28_PROGRESS, r(MISSION_V1_18_28_PROGRESS));
         assertEquals(MISSION_V1_18_28_NO_PROGRESS, r(MISSION_V1_18_28_NO_PROGRESS));

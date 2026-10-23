@@ -156,9 +156,9 @@ This repository provides an open-source Android Accessibility Service and overla
 | `BaeminScreenParserTest` | 42 (KNOWN ISSUE 2개 `@Ignore`) | 콜 화면 필터, 완료 모달(묶음, 단건, 금액 하한/상한, 메뉴금액 무시, 고객연결 고지문, 가게 도착 팝업), 마이페이지, 배달미션, 주문번호 정규식 |
 | `CoupangScreenFlowTest` | 19 (KNOWN ISSUE 1개 `@Ignore`) | 대기, 콜, 매장 도착, 픽업, 촬영, 완료 모달, 깜짝미션, 내 수입 흐름 |
 | `CoupangScreenParserTest` | 6 | 내 수입(친구초대 배너 방어), 완료 모달, 촬영 화면, 배달 내역 |
-| `DiagnosticRedactorTest` | 19 | 금액, 건수, 화면 단어는 남고 주소, 전화번호, 주문번호, 요청사항, 이름은 가려지는지 |
+| `DiagnosticRedactorTest` | 20 | 금액, 건수, 화면 단어는 남고 주소, 전화번호, 주문번호, 요청사항, 이름은 가려지는지 |
 
-현재 결과: **86개 중 83개 통과, 3개는 `@Ignore`** (바라는 동작을 적어 둔 KNOWN ISSUE로, 앱도 같은 상태입니다).
+현재 결과: **87개 중 84개 통과, 3개는 `@Ignore`** (바라는 동작을 적어 둔 KNOWN ISSUE로, 앱도 같은 상태입니다).
 
 테스트 픽스처(`ScreenFixtures.java`)는 실측 화면 덤프의 노드 경계, 글자 모양, 금액, 건수를 그대로 두고, 가게명, 주소, 사람 이름, 소속, 주문번호는 공개용 가짜 값으로 바꾼 것입니다.
 

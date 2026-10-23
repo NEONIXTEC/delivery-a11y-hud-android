@@ -178,7 +178,11 @@ public final class DiagnosticRedactor {
         if (t.matches() && !WHITELIST.contains(normalize(t.group(1)))) {
             return MASK_LINE + " " + t.group(2);
         }
-        if (MONEY.matcher(m).find() || COUNT.matcher(m).find()) return m;
+        if (MONEY.matcher(m).find() || COUNT.matcher(m).find()) {
+            // 쉼표로 이어진 목록 줄("가게 지점, [가림], [주문번호], 배달료 2,450원")은 칸마다 따진다.
+            // 금액이 있다고 줄을 통째로 남기면 맨 앞 가게 지점명이 샌다 (2026-10-24 실기기 덤프)
+            return FIELD_SEP.matcher(m).find() ? redactFields(m) : m;
+        }
         if (STORE_BRANCH.matcher(m).find()) return MASK_LINE;
         String residual = NEUTRAL.matcher(m).replaceAll("").trim().replaceAll("\\s+", " ");
         if (residual.codePointCount(0, residual.length()) <= SHORT_LINE_MAX
@@ -186,6 +190,36 @@ public final class DiagnosticRedactor {
             return m;
         }
         return MASK_LINE;
+    }
+
+    // 칸 구분 쉼표. 금액 안의 쉼표("2,450원", "11,000원")는 칸 구분이 아니다
+    static final Pattern FIELD_SEP = Pattern.compile(",(?![0-9]{3}(?![0-9]))");
+    // 목록 줄의 칸에서 남겨도 되는 말 (숫자, 시간, 가림 토큰을 뺀 나머지가 이것뿐이면 남긴다)
+    static final Set<String> FIELD_WORDS = normalizedSet("오늘", "내일", "예정", "도착예상시간", "배달료", "기본료", "총", "합계", "미션");
+    private static final Pattern FIELD_FILLER = Pattern.compile("[0-9\\s/~:.,+\\-()]");
+
+    /** 쉼표 목록 줄: 금액, 건수, 시간, 화면 단어, 가림 토큰 칸만 남기고 나머지 칸(가게명, 주소 등)은 [가림] */
+    static String redactFields(String line) {
+        String[] parts = FIELD_SEP.split(line, -1);
+        StringBuilder sb = new StringBuilder(line.length());
+        for (int i = 0; i < parts.length; i++) {
+            if (i > 0) sb.append(',');
+            String f = parts[i];
+            int lead = 0;
+            while (lead < f.length() && Character.isWhitespace(f.charAt(lead))) lead++;
+            sb.append(f, 0, lead).append(keepField(f.trim()) ? f.substring(lead) : MASK_LINE);
+        }
+        return sb.toString();
+    }
+
+    private static boolean keepField(String t) {
+        if (t.isEmpty()) return true;
+        if (t.matches("\\[[^\\]]+\\]")) return true;
+        String ns = normalize(t);
+        if (WHITELIST.contains(ns)) return true;
+        if (MONEY.matcher(t).find() || COUNT.matcher(t).find()) return !STORE_BRANCH.matcher(t).find();
+        String residual = FIELD_FILLER.matcher(NEUTRAL.matcher(t).replaceAll("")).replaceAll("");
+        return residual.isEmpty() || FIELD_WORDS.contains(normalize(residual)) || WHITELIST.contains(normalize(residual));
     }
 
     /** 공통 가림: 화면 단어 판정 없이 번호, 주소, 요청사항만 */
