@@ -1,10 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">라이더미터</string>
-    <string name="title_activity_main">라이더미터</string>
-    <string name="package_name">com.ridermeter.app</string>
-    <string name="custom_url_scheme">com.ridermeter.app</string>
-    <string name="capacitor_background_geolocation_notification_icon">drawable/ic_stat_ridermeter</string>
-    <string name="capacitor_background_geolocation_notification_color">#22d3ee</string>
     <string name="accessibility_service_desc">배민커넥트 및 쿠팡이츠 배달 완료 시 배달료와 건수를 자동으로 감지하여 주행 기록과 위젯에 연동합니다.</string>
 </resources>
