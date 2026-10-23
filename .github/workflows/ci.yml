@@ -35,7 +35,10 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      # 기본 패키지 목록의 'tools' 는 최신 sdkmanager 에 없어서 실패하므로 필요한 것만 지정
       - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
       - uses: gradle/actions/setup-gradle@v4
       - name: Unit tests and release build
         run: ./gradlew --no-daemon testDebugUnitTest assembleRelease
