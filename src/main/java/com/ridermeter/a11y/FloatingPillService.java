@@ -345,7 +345,7 @@ public class FloatingPillService extends Service {
             });
         }
 
-        View btnOk = dlgView.findViewById(R.id.btn_goal_confirm_cta);
+        View btnOk = dlgView.findViewById(R.id.btn_goal_save);
         if (btnOk != null) {
             btnOk.setOnClickListener(v -> {
                 try {

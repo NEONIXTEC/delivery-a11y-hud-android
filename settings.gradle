@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        // AGP 8.7.x: Gradle 8.9+ 와 JDK 17+ 필요, compileSdk 34 지원
+        id 'com.android.library' version '8.7.3'
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// 레포 루트 자체가 Android 라이브러리 모듈이다 (src/main, src/test 가 루트에 있음)
+rootProject.name = 'delivery-a11y-hud-android'

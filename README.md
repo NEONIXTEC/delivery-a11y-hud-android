@@ -2,6 +2,7 @@
 > **배달 라이더 접근성 파서 & 플로팅 HUD 엔진**  
 > *Read-Only Android Accessibility Service & Minimal Floating HUD Widget for Food Delivery Riders.*
 
+[![CI](https://github.com/NEONIXTEC/delivery-a11y-hud-android/actions/workflows/ci.yml/badge.svg)](https://github.com/NEONIXTEC/delivery-a11y-hud-android/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/Platform-Android%2024%2B-green.svg)](https://developer.android.com)
 [![Accessibility Read--Only](https://img.shields.io/badge/Accessibility-100%25%20Read--Only-brightgreen.svg)]()
@@ -135,6 +136,20 @@ This repository provides an open-source Android Accessibility Service and overla
 | [`DeliveryEventListener.java`](src/main/java/com/ridermeter/a11y/DeliveryEventListener.java) | 배달 완료, 실적 동기화, 미션 이벤트 수신용 클린 인터페이스 |
 | [`accessibility_service_config.xml`](src/main/res/xml/accessibility_service_config.xml) | OS 레벨 패키지 화이트리스트 격리 설정 |
 | [`parser-tests.sh`](parser-tests.sh) | Android SDK 없이 JDK만으로 파서와 가림 규칙 테스트를 돌리는 실행기 |
+
+---
+
+## 🔨 빌드와 테스트 (Build & test)
+
+클론한 뒤 아래 두 명령으로 바로 확인할 수 있습니다. GitHub Actions([`ci.yml`](.github/workflows/ci.yml))도 PR과 main 푸시마다 같은 두 명령을 돌립니다.
+
+```bash
+bash parser-tests.sh                           # 파서 테스트, JDK 17 이상만 필요
+./gradlew testDebugUnitTest assembleRelease    # Gradle 단위 테스트 + 릴리스 AAR, Android SDK 필요
+```
+
+- Gradle 빌드는 JDK 17 이상과 Android SDK Platform 34가 필요합니다. SDK 위치는 `ANDROID_HOME` 환경변수나 `local.properties`의 `sdk.dir`로 지정합니다.
+- Gradle 8.14.3 래퍼와 Android Gradle Plugin 8.7.3을 쓰며, 레포 루트가 곧 라이브러리 모듈입니다. 결과물은 `build/outputs/aar/`에 생깁니다.
 
 ---
 
